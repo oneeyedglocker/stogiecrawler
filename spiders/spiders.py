@@ -59,3 +59,27 @@ class FamousSpider(scrapy.Spider):
                     'stogie_quanity': quanity,
                     'stogie_price': price
             }
+
+
+class Cigar(scrapy.Spider):
+    name = 'cigar'
+    allowed_domains = ['cigar.com']
+    start_urls = ['https://www.cigar.com/p/cao-brazilia-cigars/1411733/']
+
+
+    def parse(self, response):
+        website_name = "cigar"
+        stogie_names = response.xpath('//div[@id="prod-groups"]//div[@class="prod-group"]')
+        for stogie in stogie_names:
+            stogie_name = stogie.xpath('.//div[@class="product-brand-heading"]/span[1]/text()').get().strip()
+            ring = stogie.xpath('.//div[@class="product-brand-heading"]/span[3]/text()').get().strip()
+            quanity = stogie.xpath('.//div[@class="row py-1 py-md-3 pl-md-2 border-bottom mx-0  prod-group-grid"]//span[@class="quantity-heading"]/text()') .get().strip()
+            price = stogie.xpath('.//div[@class="row py-1 py-md-3 pl-md-2 border-bottom mx-0  prod-group-grid"]//span[@itemprop="price"]/text()').get().strip()
+
+            yield {
+                    'website_name': website_name,
+                    'stogie_name': stogie_name,
+                    'stogie_ring': ring,
+                    'stogie_quanity': quanity,
+                    'stogie_price': price
+            }
